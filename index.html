@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <title>Transient Tag Editor 2.0</title>
+  <link href="style.css" type="text/css" rel="stylesheet" />
+  <script src='https://static.matterport.com/showcase-sdk/latest.js'> </script>
+</head>
+<body>
+  <header>
+    <h1>Transient Tag Editor 2.0</h1>
+    <a href="#about">About this Example</a>
+  </header>
+  <article>
+    <table width="100%" id="app">
+      <tr>
+        <td>
+          <div class="showcase_container" style="position: relative">
+            <iframe id="showcase" class="showcase" scrolling="no" width="100%" height="500" frameborder="0" allowfullscreen></iframe>
+            <div class="showcase_overlay"></div>
+          </div>
+        </td>
+        <td width="200" style="padding: 0 10px">
+          <h3>Space SID</h3>
+          <input type="text" id="sid" class="sid_selector" maxlength="11" />
+          <button id="add_tag">Add New Tag</button>
+          <button id="remove_tags">Remove All</button>
+          <button id="export_tags">Export JSON</button>
+          <button id="import_tags">Import JSON</button>
+          <button id="oauth-diag-submit">Connect to MP</button>
+        </td>
+      </tr>
+    </table>
+    <div class="tag_container">
+      <table class="scrollable" id="tagtable">
+        <thead>
+          <tr>
+            <th width="100">sid / Goto</th>
+            <th width="40%">label</th>
+            <th width="100%">description</th>
+            <th width="80">mediaSrc</th>
+            <th width="80">color</th>
+            <th></th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </article>
+  <footer>
+    <a name="about"></a>
+    <h2>About Transient Tag Editor 2.0</h2>
+    <p>This is a fork of Ryan Mauldin's <a href="https://github.com/Rmauldin/matterport/tree/master/transient-tag-editor" target="_blank">Transient Tag Editor</a> with OAuth and Tags 2.0.  I will be adding Model API mutation support to save edits.</p>
+    <p>As a note -- this app currently saves the OAuth refresh_token in browser localstorage, which is not secure and -not- how refresh_tokens should be stored.</p>
+    <h3>To-Do</h3>
+    <ul>
+     <li>Support attachments... somehow....</li>
+     <li>Add GraphQL Queries for adding tags to the model and updating existing tags.</li>
+     <li>Transiently removing a Tag will change row to be 'deleted' and will set Mattertag Opacity to 0.25 to indicate deleted.  Saving a transient deletion will send a GraphQL query to delete the Tag and will then remove it from the editor</li>
+     <li>Possibly support disabled tags since they can be queried via Model API with OAuth -- and then use the Graph query to load tags instead of Mattertag.getData()</li>
+    </ul>
+  </footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

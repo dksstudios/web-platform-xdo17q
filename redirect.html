@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Select a Space</title>
+  </head>
+  <body style='margin: 0;'>
+    <iframe id='model-select' style='width: 100vw; height: 100vh;'></iframe>
+    <script>
+      
+      (async function () {
+        console.log('Hello');
+        const modelSelector = document.getElementById('model-select');
+        if (window.opener) {
+          // get the authorization code out of the current URL
+          const urlParams = new URLSearchParams(window.location.search);
+          let access_token = '';
+          let token = '';          
+          if (urlParams.get('access_token') == null) {
+            console.log('Fetching access Token...');
+            const auth_code = urlParams.get('code');
+            const response = await fetch('retrieveAccessToken.php?auth_code=' + auth_code); 
+            // Get an access token and refresh token
+            token = await response.json();
+            access_token = token.access_token;
+            console.log(token);
+          }
+          else {
+            access_token = urlParams.get('access_token');
+            
+          }
+
+          // set the src of the IFrame (with the oauthToken) to start the model selector
+          modelSelector.src = 'https://authn.matterport.com/model-select?oauthToken=' + access_token;
+          if (!access_token) {
+            alert(token.error);
+            return;
+          }
+          // wait for the iframe to message us back
+          window.addEventListener('message', function (msg) {
+            if (msg.source === modelSelector.contentWindow) {
+              if (msg.data.models) {
+                // just take the first selected model
+                const [modelId] = msg.data.models.split(',');
+                if (modelId) {
+                  // post back to the app that opened this window
+                  window.opener.postMessage({
+                    type: 'auth_model',
+                    modelId,
+                    token,
+                  }, '*');
+                }
+              }
+            }
+          });
+        }
+      })();
+
+    </script>
+  </body>
+</html>
